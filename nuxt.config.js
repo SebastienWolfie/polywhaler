@@ -1,15 +1,6 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
-// export default defineNuxtConfig({
-//     css: ['~/assets/css/tailwind.css', '~/Layouts/global.css'],
-//     modules: [
-//       '@nuxtjs/tailwindcss'
-//     ],
-//     nitro: {
-//       preset: 'netlify'
-//     }
-//   });
 
 export default defineNuxtConfig({
   css: [
@@ -19,7 +10,21 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
   plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }],
   nitro: {
-    preset: 'vercel'
+    preset: 'vercel',
+    vercel: {
+      functions: {
+        // This bundles all your server routes into one single function
+        includeFiles: 'server/**',
+      },
+    },
+    // This is the key setting to bypass the 12-function limit:
+    output: {
+      serverDir: '.output/server'
+    }
+  },
+  // Ensure you aren't over-splitting
+  routeRules: {
+    '/api/**': { isr: false } // Ensures API isn't split into static/lambda hybrids
   },
   vite: {
     plugins: [
@@ -43,24 +48,3 @@ export default defineNuxtConfig({
     }
   }
 });
-
-// export default {
-//   vite: {
-//     optimizeDeps: {
-//       include: [
-//         // 'vue-google-maps-community-fork',
-//         "fast-deep-equal",
-//       ],
-//     },
-//   },
-//   css: [
-//     "~/assets/css/tailwind.css",
-//     "~/Layouts/global.css"
-//   ],
-//   modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
-//   target: "static",
-//   router: {
-//     base: "/Coinpad/",
-//   },
-//   plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }],
-// };
