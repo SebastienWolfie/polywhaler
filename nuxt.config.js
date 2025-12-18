@@ -16,6 +16,12 @@ export default defineNuxtConfig({
         // This bundles all your server routes into one single function
         includeFiles: 'server/**',
       },
+      config: {
+        // This ensures all routes are handled by one function
+        functions: {
+          "maxDuration": 10
+        }
+      }
     },
     // This is the key setting to bypass the 12-function limit:
     output: {
