@@ -3,8 +3,6 @@ import 'node:http';
 import 'node:https';
 import 'fs';
 import 'path';
-import 'node:fs';
-import 'node:url';
 
 const all = defineEventHandler(async (event) => {
   try {

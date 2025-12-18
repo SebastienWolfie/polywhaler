@@ -3,8 +3,6 @@ import 'node:http';
 import 'node:https';
 import 'fs';
 import 'path';
-import 'node:fs';
-import 'node:url';
 
 const _slug_ = defineEventHandler(async (event) => {
   const { slug } = event.context.params;
