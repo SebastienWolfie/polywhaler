@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event);
     // Default to 24h ago if 'since' is missing
-    const since = '24h';
+    const since = query.since || '24h';
 
     // Fetch trades from Polymarket
     // We grab more data (limit=5000) to ensure smooth charts
