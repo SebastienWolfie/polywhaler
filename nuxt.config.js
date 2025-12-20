@@ -7,8 +7,5 @@ export default defineNuxtConfig({
     "~/Layouts/global.css"
   ],
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
-  plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }],
-  experimental: {
-    renderJsonPayloads: false
-  }
+  plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }]
 });
