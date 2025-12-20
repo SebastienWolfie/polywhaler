@@ -29,6 +29,13 @@
             <p class="text-sm font-medium mt-1">************ (hidden)</p>
           </div>
 
+
+          <div>
+            <label class="text-sm text-white/50">Wallet Address</label>
+            <p class="text-sm font-medium mt-1">{{ useAuth().value.walletAddress }}</p>
+          </div>
+
+
           <div>
             <label class="text-sm text-white/50">Account Created</label>
             <p class="text-sm font-medium mt-1">

@@ -139,10 +139,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const isOpen = ref(false)
-const props = defineProps(['page'])
-const auth = useAuth();
+    import { getAddress, getIsConnected, subscribeState, openModal, disconnectWallet, getChainID, switchNetwork, getProvider, getWalletETHBalance } from '../../apiss/web3/walletconnect';
+    import { create as saveAddressSignature, getAddressSignature, update as updateAddressSignature } from '../../apiss/walletSignature'
+
+    const isOpen = ref(false)
+    const props = defineProps(['page'])
+    const auth = useAuth();
+
+    onMounted(async() => {
+        auth.value.isWalletConnected = getIsConnected();
+        auth.value.walletAddress = getAddress();
+        if (getAddress()) auth.value.addressSignature = await getAddressSignature(getAddress());
+        listenToWalletStateChange()
+    })
+
+    function listenToWalletStateChange() {
+        subscribeState()?.on('STATE_CHANGED', async events => {
+            auth.value.isWalletConnected = getIsConnected();
+            auth.value.walletAddress = getAddress();
+          if (getAddress()) auth.value.addressSignature = await getAddressSignature(getAddress());
+        });
+    }
+
 </script>
 
 <style>

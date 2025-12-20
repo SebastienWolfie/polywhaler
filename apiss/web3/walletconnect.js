@@ -7,9 +7,9 @@ import { BrowserProvider, ethers, Contract, formatUnits, parseEther } from 'ethe
 
 
 const metadata = {
-  name: 'UNI Bridge',
-  description: 'The easiest way to swap UNI tokens between chains.',
-  url: 'http://unichainbridge.web.app',
+  name: 'Polywhaler',
+  description: 'PolyWhaler analyzes Polymarket wallets on Polygon. Discover whale trades, wallet scores, performance metrics, risk profiles, and real on-chain trading activity.',
+  url: 'http://polywhaler.web.app',
   icons: ['https://avatars.mywebsite.com/']
 }
 

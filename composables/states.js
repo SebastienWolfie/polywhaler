@@ -6,6 +6,7 @@ export const useAuth = () =>
         walletAddress: '',
         isWalletConnected: false,
         showNoAuthModal: false,
-        showPriceModal: false
+        showPriceModal: false,
+        addressSignature: null
   }));
   
