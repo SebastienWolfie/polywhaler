@@ -7,5 +7,14 @@ export default defineNuxtConfig({
     "~/Layouts/global.css"
   ],
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
-  plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }]
+  plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }],
+  nitro: {
+    preset: 'vercel'
+  },
+  routeRules: {
+    '/api/**': { cache: false } 
+  },
+  experimental: {
+    renderJsonPayloads: false
+  }
 });
