@@ -3,8 +3,26 @@ import type { Serialize, Simplify } from 'nitropack'
 declare module 'nitropack' {
   type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T
   interface InternalApi {
-    '/api/**:path': {
-      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/[...path]').default>>>>
+    '/api/coingecko/price/:ids': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/coingecko/price/[ids]').default>>>>
+    }
+    '/api/polymarket/history/stat': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/polymarket/history/stat').default>>>>
+    }
+    '/api/polymarket/market/:slug': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/polymarket/market/[slug]').default>>>>
+    }
+    '/api/polymarket/trade/:slug': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/polymarket/trade/[slug]').default>>>>
+    }
+    '/api/polymarket/trades/latest': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/polymarket/trades/latest').default>>>>
+    }
+    '/api/polymarket/whale/:address': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/polymarket/whale/[address]').default>>>>
+    }
+    '/api/polymarket/whales/all': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/polymarket/whales/all').default>>>>
     }
     '/__nuxt_error': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/renderer').default>>>>
