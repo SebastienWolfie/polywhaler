@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <Container page="home">
-      <Home />
-    </Container>
+  <div style="color: red; font-size: 24px">
+    INDEX ROUTE WORKS page indexd
   </div>
 </template>
+
 
 <script setup>
 
