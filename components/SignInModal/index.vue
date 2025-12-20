@@ -1,6 +1,6 @@
 <script setup>
 import { X } from 'lucide-vue-next'
-import { googleLogin, login } from '../../api/auth'
+import { googleLogin, login } from '../../apiss/auth'
 
 const emit = defineEmits(['onClose'])
 const error = ref('')
@@ -28,7 +28,7 @@ const validateEmail = (email) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
-const handleSubmit = async() => {
+const handleSubmit = async () => {
   if (loading.value) return;
   error.value = ""
 
@@ -76,15 +76,13 @@ const handleSubmit = async() => {
 
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 font-sans">
-    
+
     <!-- Modal Container -->
     <div class="bg-black border border-gray-800 w-full max-w-[480px] rounded-2xl p-8 relative shadow-2xl">
-      
+
       <!-- Close Button -->
-      <button
-        @click="()=>$emit('onClose')"
-        class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors"
-      >
+      <button @click="() => $emit('onClose')"
+        class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors">
         <X :size="20" />
       </button>
 
@@ -96,37 +94,25 @@ const handleSubmit = async() => {
 
       <!-- Form -->
       <form class="space-y-4" @submit.prevent="handleSubmit">
-        
+
         <!-- Email Input -->
         <div class="space-y-2">
           <label class="block text-white font-semibold text-sm">Email</label>
-          <input
-            type="email"
-            placeholder="you@example.com"
-            v-model="email"
-            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 
-            focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          />
+          <input type="email" placeholder="you@example.com" v-model="email" class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 
+            focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
         <!-- Password Input -->
         <div class="space-y-2">
           <label class="block text-white font-semibold text-sm">Password</label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            v-model="password"
-            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 
-            focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          />
+          <input type="password" placeholder="••••••••" v-model="password" class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 
+            focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
         <p class="my-2 text-red-400 font-semibold" v-if="error">{{ error }}</p>
         <!-- Sign In Button -->
-        <button
-          type="submit"
-          class="w-full bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl mt-4 transition-colors text-sm"
-        > 
+        <button type="submit"
+          class="w-full bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl mt-4 transition-colors text-sm">
           {{ (loading) ? 'Loading...' : 'Sign in' }}
         </button>
       </form>
@@ -141,35 +127,18 @@ const handleSubmit = async() => {
       </div>
 
       <!-- Google Login Button -->
-      <button
-        type="button"
-        @click="() => googleClicked()"
-        class="w-full border border-gray-700 hover:border-white text-white font-semibold py-3.5 rounded-xl flex items-center justify-center 
-        transition-colors text-sm bg-[#050505] hover:bg-gray-900"
-      >
+      <button type="button" @click="() => googleClicked()" class="w-full border border-gray-700 hover:border-white text-white font-semibold py-3.5 rounded-xl flex items-center justify-center 
+        transition-colors text-sm bg-[#050505] hover:bg-gray-900">
         <!-- Inline Google SVG -->
-        <svg
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 48 48"
-          class="w-5 h-5 mr-3"
-        >
-          <path
-            fill="#4285F4"
-            d="M24 10.3c3.2 0 5.6 1.4 6.8 2.6l4.6-4.6c-2.9-2.7-6.9-4.3-11.4-4.3C14.7 4 7.8 10.9 7.8 20s6.9 16 16.2 16c4.6 0 8.7-1.6 11.6-4.3l-4.6-4.6c-1.3 1.2-3.7 2.6-7 2.6-4.7 0-8.6-3.9-8.6-8.8S19.3 11.2 24 11.2z"
-          />
-          <path
-            fill="#34A853"
-            d="M43.7 24c0-1.8-.1-3.6-.5-5.3H24v10.6h11.8c-.5 3.1-2.2 5.6-4.7 7.3l-7.1 7.1c-4.4-4.2-7.1-10.2-7.1-17.6 0-.8.1-1.5.2-2.3H4v8h6.1c1.2 2.7 3.2 5 5.6 6.6l7.1 7.1c4.5-4.2 7.3-10.2 7.3-17.6z"
-          />
-          <path
-            fill="#FBBC05"
-            d="M43.7 24h-19.7v-4.7h19.7c.3 1.6.5 3.3.5 5.3s-.2 3.7-.5 5.3H24v-10.6h19.7c.3 1.6.5 3.3.5 5.3z"
-          />
-          <path
-            fill="#EA4335"
-            d="M24 39.8c-4.6 0-8.6-1.6-11.4-4.3l-4.6 4.6c2.9 2.7 6.9 4.3 11.4 4.3 4.6 0 8.7-1.6 11.6-4.3l-4.6-4.6c-1.3 1.2-3.7 2.6-7 2.6z"
-          />
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-5 h-5 mr-3">
+          <path fill="#4285F4"
+            d="M24 10.3c3.2 0 5.6 1.4 6.8 2.6l4.6-4.6c-2.9-2.7-6.9-4.3-11.4-4.3C14.7 4 7.8 10.9 7.8 20s6.9 16 16.2 16c4.6 0 8.7-1.6 11.6-4.3l-4.6-4.6c-1.3 1.2-3.7 2.6-7 2.6-4.7 0-8.6-3.9-8.6-8.8S19.3 11.2 24 11.2z" />
+          <path fill="#34A853"
+            d="M43.7 24c0-1.8-.1-3.6-.5-5.3H24v10.6h11.8c-.5 3.1-2.2 5.6-4.7 7.3l-7.1 7.1c-4.4-4.2-7.1-10.2-7.1-17.6 0-.8.1-1.5.2-2.3H4v8h6.1c1.2 2.7 3.2 5 5.6 6.6l7.1 7.1c4.5-4.2 7.3-10.2 7.3-17.6z" />
+          <path fill="#FBBC05"
+            d="M43.7 24h-19.7v-4.7h19.7c.3 1.6.5 3.3.5 5.3s-.2 3.7-.5 5.3H24v-10.6h19.7c.3 1.6.5 3.3.5 5.3z" />
+          <path fill="#EA4335"
+            d="M24 39.8c-4.6 0-8.6-1.6-11.4-4.3l-4.6 4.6c2.9 2.7 6.9 4.3 11.4 4.3 4.6 0 8.7-1.6 11.6-4.3l-4.6-4.6c-1.3 1.2-3.7 2.6-7 2.6z" />
         </svg>
 
         Continue with Google
@@ -178,7 +147,8 @@ const handleSubmit = async() => {
       <!-- Footer -->
       <div class="mt-8 text-center flex justify-center text-sm text-gray-500">
         Don't have an account?
-        <span @click="() => $emit('registerClicked')" class="text-[#639bfb] ml-1 cursor-pointer hover:text-blue-400 font-medium">
+        <span @click="() => $emit('registerClicked')"
+          class="text-[#639bfb] ml-1 cursor-pointer hover:text-blue-400 font-medium">
           Sign up
         </span>
       </div>

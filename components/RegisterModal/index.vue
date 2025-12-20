@@ -5,10 +5,8 @@
     <div class="bg-black border border-gray-800 w-full max-w-[480px] rounded-2xl p-8 relative shadow-2xl">
 
       <!-- Close Button -->
-      <button
-        @click="() => $emit('onClose')"
-        class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors"
-      >
+      <button @click="() => $emit('onClose')"
+        class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors">
         <X :size="20" />
       </button>
 
@@ -25,58 +23,40 @@
         <div class="space-y-2">
           <label class="block text-white font-semibold text-sm">Email</label>
 
-          <input
-            v-model="email"
-            type="email"
-            placeholder="you@example.com"
+          <input v-model="email" type="email" placeholder="you@example.com"
             class="w-full bg-[#050505] border border-blue-500 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all"
-            autofocus
-          />
+            autofocus />
         </div>
 
         <!-- Username Input -->
         <div class="space-y-2">
           <label class="block text-white font-semibold text-sm">Username</label>
 
-          <input
-            v-model="username"
-            type="text"
-            placeholder="whale_tracker"
-            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          />
+          <input v-model="username" type="text" placeholder="whale_tracker"
+            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
         <!-- Password Input -->
         <div class="space-y-2">
           <label class="block text-white font-semibold text-sm">Password</label>
 
-          <input
-            v-model="password"
-            type="password"
-            placeholder="........"
-            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          />
+          <input v-model="password" type="password" placeholder="........"
+            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
         <!-- Confirm Password Input -->
         <div class="space-y-2">
           <label class="block text-white font-semibold text-sm">Confirm Password</label>
 
-          <input
-            v-model="confirmPassword"
-            type="password"
-            placeholder="........"
-            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          />
+          <input v-model="confirmPassword" type="password" placeholder="........"
+            class="w-full bg-[#050505] border border-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
         <p class="my-2 text-red-400 font-semibold" v-if="error">{{ error }}</p>
 
         <!-- Submit Button -->
-        <button
-          type="submit"
-          class="w-full bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl mt-4 transition-colors text-sm"
-        >
+        <button type="submit"
+          class="w-full bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl mt-4 transition-colors text-sm">
           {{ (loading) ? 'Creating...' : 'Create account' }}
         </button>
 
@@ -85,7 +65,8 @@
       <!-- Footer -->
       <div class="mt-6 text-center text-sm flex justify-center text-gray-500">
         Already have an account?
-        <span @click="() => $emit('signInClicked')" class="text-[#639bfb] ml-1 cursor-pointer hover:text-blue-400 font-medium">Sign in</span>
+        <span @click="() => $emit('signInClicked')"
+          class="text-[#639bfb] ml-1 cursor-pointer hover:text-blue-400 font-medium">Sign in</span>
       </div>
 
     </div>
@@ -96,7 +77,7 @@
 <script setup>
 import { ref } from 'vue'
 import { X } from 'lucide-vue-next'
-import { register } from '~/api/auth'
+import { register } from '~/apiss/auth'
 
 
 const email = ref('')

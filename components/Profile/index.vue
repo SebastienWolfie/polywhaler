@@ -52,8 +52,7 @@
 
           <button
             class="px-4 py-3 border border-red-500/60 text-red-400 rounded-xl text-sm font-bold w-full hover:bg-red-500/10 transition"
-            @click="logoutClicked"
-          >
+            @click="logoutClicked">
             Log Out
           </button>
         </div>
@@ -63,7 +62,7 @@
 </template>
 
 <script setup>
-import logout from '~/api/logout'
+import logout from '~/apiss/logout'
 
 const user = ref(useAuth().value.user)
 
@@ -80,7 +79,7 @@ const changePassword = () => {
 }
 
 const logoutClicked = async () => {
-    await logout()
-    navigateTo('/')
+  await logout()
+  navigateTo('/')
 }
 </script>
