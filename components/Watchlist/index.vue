@@ -26,6 +26,9 @@ onMounted(async () => {
 
     const { getAllWhales } = usePolymarket()
     const data = await getAllWhales(10, 0)
+    // const data = await useAsyncData(`whales`, () => getAllWhales(10, 0), {
+    //   transform: (data) => JSON.parse(JSON.stringify(data))
+    // })
 
     suggestedWhales.value = data.slice(0, 6)
   } catch (err) {

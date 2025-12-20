@@ -282,6 +282,9 @@ async function loadLatestTrades() {
       const { getLatestTrades } = usePolymarket();
       if (getLatestTrades) {
         return await getLatestTrades();
+        // return await useAsyncData(`trades`, () => getLatestTrades(), {
+        //   transform: (data) => JSON.parse(JSON.stringify(data))
+        // })
       }
     } catch (e) {
       // ignore — fallback to direct API
@@ -289,7 +292,7 @@ async function loadLatestTrades() {
   }
 
   // fallback: direct fetch to your server route (expects /api/trades)
-  return await $fetch('/api/trades');
+  // return await $fetch('/api/trades');
 }
 
 // load on mount

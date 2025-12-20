@@ -93,7 +93,7 @@
         "./imports"
       ],
       "#app-manifest": [
-        "./manifest/meta/dev.json"
+        "./manifest/meta/801af771-1aee-4e57-b13d-adb7c155d98c.json"
       ],
       "#build": [
         "."
@@ -142,6 +142,6 @@
     "../node_modules/@nuxt/devtools/runtime/server",
     "../node_modules/@nuxt/telemetry/runtime/server",
     "../dist",
-    "../.output"
+    "../.vercel/output"
   ]
 }

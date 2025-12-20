@@ -1,1 +1,0 @@
-function i(s,e=2,b=".",h=","){try{e=Math.abs(e),e=isNaN(e)?2:e;const t=s<0?"-":"";let r=parseInt(s=Math.abs(Number(s)||0).toFixed(e)).toString(),g=r.length>3?r.length%3:0;return t+(g?r.slice(0,g)+h:"")+r.slice(g).replace(/(\d{3})(?=\d)/g,"$1"+h)+(e?b+Math.abs(s-r).toFixed(e).slice(2):"")}catch(t){console.log(t)}}export{i as f};

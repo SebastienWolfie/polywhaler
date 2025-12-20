@@ -3871,7 +3871,7 @@ const appConfig0 = defineAppConfig({
 
 const inlineAppConfig = {
   "nuxt": {
-    "buildId": "13560414-7695-4e07-88dc-26386d2d277f"
+    "buildId": "05f22110-0e19-4654-bbea-8d0577b78d69"
   }
 };
 
@@ -5138,23 +5138,9 @@ const errorHandler = (async function errorhandler(error, event) {
   return send(event, html);
 });
 
-const _lazy_OVdG7r = () => import('./routes/api/coingecko/price/_ids_.mjs');
-const _lazy_DPbZnB = () => import('./routes/api/polymarket/history/stat.mjs');
-const _lazy_zbjJ8P = () => import('./routes/api/polymarket/market/_slug_.mjs');
-const _lazy_JakZaw = () => import('./routes/api/polymarket/trade/_slug_.mjs');
-const _lazy_byBQB3 = () => import('./routes/api/polymarket/trades/latest.mjs');
-const _lazy_BiZjEd = () => import('./routes/api/polymarket/whale/_address_.mjs');
-const _lazy_uuCZBa = () => import('./routes/api/polymarket/whales/all.mjs');
 const _lazy_Bq38JK = () => import('./routes/renderer.mjs').then(function (n) { return n.r; });
 
 const handlers = [
-  { route: '/api/coingecko/price/:ids', handler: _lazy_OVdG7r, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/history/stat', handler: _lazy_DPbZnB, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/market/:slug', handler: _lazy_zbjJ8P, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/trade/:slug', handler: _lazy_JakZaw, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/trades/latest', handler: _lazy_byBQB3, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/whale/:address', handler: _lazy_BiZjEd, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/whales/all', handler: _lazy_uuCZBa, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_error', handler: _lazy_Bq38JK, lazy: true, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_Bq38JK, lazy: true, middleware: false, method: undefined }
 ];
@@ -5293,5 +5279,5 @@ const vercel = (function(req, res) {
   return handler(req, res);
 });
 
-export { $fetch as $, klona as A, defuFn as B, parseQuery as C, withTrailingSlash as D, withoutTrailingSlash as E, vercel as F, send as a, getResponseStatus as b, createError$1 as c, defineEventHandler as d, eventHandler as e, setResponseStatus as f, getQuery as g, setResponseHeaders as h, useRuntimeConfig as i, joinRelativeURL as j, getRouteRules as k, getResponseStatusText as l, hasProtocol as m, isScriptProtocol as n, joinURL as o, parseURL as p, defu as q, sanitizeStatusCode as r, setResponseHeader as s, createHooks as t, useNitroApp as u, isSamePath as v, withQuery as w, toRouteMatcher as x, createRouter$1 as y, hash as z };
+export { $fetch as $, defuFn as A, parseQuery as B, withTrailingSlash as C, withoutTrailingSlash as D, vercel as E, send as a, setResponseStatus as b, setResponseHeaders as c, useRuntimeConfig as d, eventHandler as e, getQuery as f, getResponseStatus as g, createError$1 as h, getRouteRules as i, joinRelativeURL as j, getResponseStatusText as k, hasProtocol as l, isScriptProtocol as m, joinURL as n, defu as o, parseURL as p, sanitizeStatusCode as q, createHooks as r, setResponseHeader as s, isSamePath as t, useNitroApp as u, toRouteMatcher as v, withQuery as w, createRouter$1 as x, hash as y, klona as z };
 //# sourceMappingURL=runtime.mjs.map

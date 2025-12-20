@@ -20,6 +20,9 @@ async function fetchTrades() {
   rawTrades.value = []; // Clear old data immediately for a responsive feel
   try {
     const response = await getHistoryStats(activeRange.value);
+    // const response = await useAsyncData(`trade-${activeRange.value}`, () => getHistoryStats(activeRange.value), {
+    //   transform: (data) => JSON.parse(JSON.stringify(data))
+    // })
     
     if (Array.isArray(response) && response.length > 0) {
       // Data is correctly loaded and sorted in the backend

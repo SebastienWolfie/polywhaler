@@ -375,10 +375,16 @@ onMounted(async () => {
     // fetch market
     const { getMarket, getTrade } = usePolymarket()
     market.value = await getTrade(slug);
+    // market.value = await useAsyncData(`trade-${slug}`, () => getTrade(slug), {
+    //   transform: (data) => JSON.parse(JSON.stringify(data))
+    // })
 
     // fetch trades for this market (server route)
     const tres = await getMarket(slug);
-    trades.value = (tres?.trades || []).sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+    // const tres = await useAsyncData(`market-${slug}`, () => getMarket(slug), {
+    //   transform: (data) => JSON.parse(JSON.stringify(data))
+    // })
+    trades.value = (tres || []).sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
 
   } catch (err) {
     console.error('Load error', err);

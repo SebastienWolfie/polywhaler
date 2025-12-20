@@ -106,6 +106,9 @@ async function fetchCryptoData() {
     console.log('ids', ids)
     const { getPrice } = useCoingecko();
     const response = await getPrice(ids);
+    // const response = await useAsyncData(`price-${ids}`, () => getPrice(ids), {
+    //   transform: (data) => JSON.parse(JSON.stringify(data))
+    // })
     console.log(response)
 
     if (response.error) return

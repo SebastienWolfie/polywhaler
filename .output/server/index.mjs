@@ -828,23 +828,11 @@ const errorHandler = (async function errorhandler(error, event) {
   return send(event, html);
 });
 
-const _lazy_OVdG7r = () => Promise.resolve().then(function () { return _ids_$1; });
-const _lazy_DPbZnB = () => Promise.resolve().then(function () { return stat$1; });
-const _lazy_zbjJ8P = () => Promise.resolve().then(function () { return _slug_$3; });
-const _lazy_JakZaw = () => Promise.resolve().then(function () { return _slug_$1; });
-const _lazy_byBQB3 = () => Promise.resolve().then(function () { return latest$1; });
-const _lazy_BiZjEd = () => Promise.resolve().then(function () { return _address_$1; });
-const _lazy_uuCZBa = () => Promise.resolve().then(function () { return all$1; });
+const _lazy_2wZSGR = () => Promise.resolve().then(function () { return ____path_$1; });
 const _lazy_Bq38JK = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '/api/coingecko/price/:ids', handler: _lazy_OVdG7r, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/history/stat', handler: _lazy_DPbZnB, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/market/:slug', handler: _lazy_zbjJ8P, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/trade/:slug', handler: _lazy_JakZaw, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/trades/latest', handler: _lazy_byBQB3, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/whale/:address', handler: _lazy_BiZjEd, lazy: true, middleware: false, method: undefined },
-  { route: '/api/polymarket/whales/all', handler: _lazy_uuCZBa, lazy: true, middleware: false, method: undefined },
+  { route: '/api/**:path', handler: _lazy_2wZSGR, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_error', handler: _lazy_Bq38JK, lazy: true, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_Bq38JK, lazy: true, middleware: false, method: undefined }
 ];
@@ -1056,104 +1044,70 @@ const errorDev = /*#__PURE__*/Object.freeze({
   template: template$1
 });
 
-const _ids_ = defineEventHandler(async (event) => {
-  try {
-    const { ids } = event.context.params;
-    const prices = await $fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`, {
-      headers: { accept: "application/json" }
-    });
-    return prices;
-  } catch (err) {
-    console.error("API Error:", err);
-    return { error: err.message };
-  }
-});
-
-const _ids_$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: _ids_
-});
-
-const stat = defineEventHandler(async (event) => {
-  try {
-    const query = getQuery$1(event);
-    const since = "24h";
-    const trades = await $fetch(`https://www.polywhaler.com/api/trades?time=${since}&category=all`, {
-      headers: { accept: "application/json" }
-    });
-    return trades.trades.sort((a, b) => a.timestamp - b.timestamp);
-  } catch (err) {
-    console.error("API Error:", err);
-    return { error: err.message };
-  }
-});
-
-const stat$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: stat
-});
-
-const _slug_$2 = defineEventHandler(async (event) => {
-  const { slug } = event.context.params;
+const ____path_ = defineEventHandler(async (event) => {
+  var _a;
+  const path = ((_a = event.context.params) == null ? void 0 : _a.path) || "";
   const query = getQuery$1(event);
-  const limit = query.limit || 50;
-  const offset = query.offset || 0;
   try {
-    const res = await $fetch(`https://data-api.polymarket.com/trades?slug=${encodeURIComponent(slug)}&limit=${limit}&offset=${offset}`, {
-      headers: { accept: "application/json" }
+    if (path === "polymarket/trades/latest") {
+      const data = await getLatestTrade(query);
+      return safeResponse("polymarket/trades/latest", data);
+    }
+    if (path === "polymarket/whales/all") {
+      const data = await getAllWhales(query);
+      return safeResponse("polymarket/whales/all", data);
+    }
+    if (path.startsWith("polymarket/trade/")) {
+      const slug = path.split("/")[2];
+      const data = await getTrade(slug);
+      return safeResponse("polymarket/trade", data);
+    }
+    if (path.startsWith("polymarket/market/")) {
+      const slug = path.split("/")[2];
+      const data = await getMarket(slug, query);
+      return safeResponse("polymarket/market", data);
+    }
+    if (path.startsWith("polymarket/whale/")) {
+      const address = path.split("/")[2];
+      const data = await getWhale(address);
+      return safeResponse("polymarket/whale", data);
+    }
+    if (path === "polymarket/history/stat") {
+      const since = query.since || "24h";
+      const data = await getHistoryStat(since);
+      return safeResponse("polymarket/history/stat", data);
+    }
+    if (path.startsWith("coingecko/price/")) {
+      const ids = path.split("/")[2];
+      const data = await getCoingeckoPrice(ids);
+      return safeResponse("coingecko/price", data);
+    }
+    return safeResponse("fallback", {
+      error: true,
+      message: "Unknown API route",
+      path
     });
-    const tradesRaw = Array.isArray(res) ? res : res.data || [];
-    const trades = tradesRaw.map((t) => ({
-      transactionHash: t.transactionHash || t.txid || t.tx || null,
-      icon: t.icon || null,
-      title: t.title || null,
-      timestamp: t.timestamp,
-      // unix seconds
-      outcome: t.outcome || t.prediction || null,
-      price: typeof t.price === "number" ? t.price : t.prob || null,
-      size: t.size || t.shares || t.amount || 0,
-      side: (t.side || t.action || t.type || "").toUpperCase(),
-      pseudonym: t.pseudonym || t.trader || t.maker || t.address || null,
-      proxyWallet: t.proxyWallet || null,
-      slug: t.slug || slug,
-      raw: t
-    }));
-    return { trades };
   } catch (err) {
-    console.error("Failed to fetch trades for market", slug, err);
-    return createError({ statusCode: 502, statusMessage: "Failed to fetch trades" });
+    console.error("API error:", err);
+    return safeResponse("handler-error", {
+      error: true,
+      message: (err == null ? void 0 : err.message) || "Internal API error"
+    });
   }
 });
-
-const _slug_$3 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: _slug_$2
-});
-
-const _slug_ = defineEventHandler(async (event) => {
-  const { slug } = event.context.params;
+function safeResponse(label, data) {
   try {
-    const market = await $fetch(`https://gamma-api.polymarket.com/events/slug/${slug}`, {
-      headers: { accept: "application/json" }
-    });
-    return market;
-  } catch (err) {
-    console.error(`Failed to fetch market for ${slug}`, err);
+    return JSON.parse(JSON.stringify(data));
+  } catch (e) {
+    console.error(`\u274C NON-SERIALIZABLE RESPONSE: ${label}`, e);
     return {
-      error: `Failed to fetch market for ${slug}`,
-      err
+      error: true,
+      message: `Serialization failed for ${label}`
     };
   }
-});
-
-const _slug_$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: _slug_
-});
-
-const latest = defineEventHandler(async (event) => {
+}
+async function getLatestTrade(query) {
   try {
-    const query = getQuery$1(event);
     const search = (query.search || "").toLowerCase();
     const sideFilter = query.side || "";
     const sort = query.sort || "recent";
@@ -1231,16 +1185,71 @@ const latest = defineEventHandler(async (event) => {
     console.error("API Error:", err);
     return { error: err.message };
   }
-});
-
-const latest$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: latest
-});
-
-const _address_ = defineEventHandler(async (event) => {
+}
+async function getTrade(slug) {
   try {
-    const { address } = event.context.params;
+    const market = await $fetch(`https://gamma-api.polymarket.com/events/slug/${slug}`, {
+      headers: { accept: "application/json" }
+    });
+    return market;
+  } catch (err) {
+    console.error(`Failed to fetch market for ${slug}`, err);
+    return {
+      error: `Failed to fetch market for ${slug}`
+    };
+  }
+}
+async function getMarket(slug, query) {
+  const limit = query.limit || 50;
+  const offset = query.offset || 0;
+  try {
+    const res = await $fetch(`https://data-api.polymarket.com/trades?slug=${encodeURIComponent(slug)}&limit=${limit}&offset=${offset}`, {
+      headers: { accept: "application/json" }
+    });
+    const tradesRaw = Array.isArray(res) ? res : res.data || [];
+    const trades = tradesRaw.map((t) => ({
+      transactionHash: t.transactionHash || t.txid || t.tx || null,
+      icon: t.icon || null,
+      title: t.title || null,
+      timestamp: t.timestamp,
+      // unix seconds
+      outcome: t.outcome || t.prediction || null,
+      price: typeof t.price === "number" ? t.price : t.prob || null,
+      size: t.size || t.shares || t.amount || 0,
+      side: (t.side || t.action || t.type || "").toUpperCase(),
+      pseudonym: t.pseudonym || t.trader || t.maker || t.address || null,
+      proxyWallet: t.proxyWallet || null,
+      slug: t.slug || slug
+    }));
+    return { trades };
+  } catch (err) {
+    return { statusCode: 502, statusMessage: "Failed to fetch trades" };
+  }
+}
+async function getHistoryStat(since = "24h") {
+  try {
+    const trades = await $fetch(`https://www.polywhaler.com/api/trades?time=${since}&category=all`, {
+      headers: { accept: "application/json" }
+    });
+    return trades.trades.sort((a, b) => a.timestamp - b.timestamp);
+  } catch (err) {
+    console.error("API Error:", err);
+    return { error: err.message };
+  }
+}
+async function getCoingeckoPrice(ids) {
+  try {
+    const prices = await $fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`, {
+      headers: { accept: "application/json" }
+    });
+    return prices;
+  } catch (err) {
+    console.error("API Error:", err);
+    return { error: err.message };
+  }
+}
+async function getWhale(address) {
+  try {
     const trades = await $fetch(`https://www.polywhaler.com/api/whale-profile/${address}?refresh=false`, {
       headers: { accept: "application/json" }
     });
@@ -1249,16 +1258,9 @@ const _address_ = defineEventHandler(async (event) => {
     console.error("API Error:", err);
     return { error: err.message };
   }
-});
-
-const _address_$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: _address_
-});
-
-const all = defineEventHandler(async (event) => {
+}
+async function getAllWhales(query) {
   try {
-    const query = getQuery$1(event);
     const limit = Number(query.limit || 10);
     const offset = Number(query.offset || 0);
     const trades = await $fetch(`https://www.polywhaler.com/api/trades?time=7d&category=all`, {
@@ -1269,7 +1271,7 @@ const all = defineEventHandler(async (event) => {
     console.error("API Error:", err);
     return { error: err.message };
   }
-});
+}
 function aggregateWhales(trades) {
   const map = {};
   trades.forEach((t) => {
@@ -1324,9 +1326,9 @@ function formatMoney(amount) {
   return `$${num.toFixed(0)}`;
 }
 
-const all$1 = /*#__PURE__*/Object.freeze({
+const ____path_$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  default: all
+  default: ____path_
 });
 
 const Vue3 = version.startsWith("3");
