@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "~/Layouts/global.css"
   ],
   ssr: false,
+  css: [],
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
   plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }],
   experimental: {
