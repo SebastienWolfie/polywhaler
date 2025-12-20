@@ -5,7 +5,7 @@ import cfg0 from "/Users/icon/ico/polywhaler/app.config"
 
 declare const inlineConfig = {
   "nuxt": {
-    "buildId": "13560414-7695-4e07-88dc-26386d2d277f"
+    "buildId": "dev"
   }
 }
 type ResolvedAppConfig = Defu<typeof inlineConfig, [typeof cfg0]>
