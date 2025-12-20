@@ -1,9 +1,8 @@
 <template>
-  <div style="color: red; font-size: 24px">
-    INDEX ROUTE WORKS
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
-
 
 <script setup>
 import { listenToUserStateChanged } from './apiss/authstate'
