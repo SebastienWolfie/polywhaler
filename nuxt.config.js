@@ -8,9 +8,6 @@ export default defineNuxtConfig({
   ],
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
   plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }],
-  nitro: {
-    preset: 'vercel'
-  },
   experimental: {
     renderJsonPayloads: false
   }
