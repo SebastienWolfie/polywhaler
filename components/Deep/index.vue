@@ -72,7 +72,7 @@
 
 
         <div class="text-center mt-10"
-             @click="() => auth.showPriceModal()">
+             @click="() => auth.showPriceModal = true">
             <button class="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-base font-bold hover:opacity-90 transition-opacity shadow-lg shadow-purple-500/30">
                 Upgrade to Pro
             </button>

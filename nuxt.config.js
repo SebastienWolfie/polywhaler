@@ -13,8 +13,5 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/api/**': { cache: false } 
-  },
-  experimental: {
-    renderJsonPayloads: false
   }
 });

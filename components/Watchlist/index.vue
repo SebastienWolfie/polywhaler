@@ -68,7 +68,7 @@ const filteredWhales = computed(() => {
 
 async function followButtonClicked(item) {
   if (!auth.value.user) {
-    auth.value.showNoAuthModal()
+    auth.value.showNoAuthModal = true
     return
   }
 
@@ -78,7 +78,7 @@ async function followButtonClicked(item) {
 
 async function unfollowButtonClicked(item) {
   if (!auth.value.user) {
-    auth.value.showNoAuthModal()
+    auth.value.showNoAuthModal = true
     return
   }
 

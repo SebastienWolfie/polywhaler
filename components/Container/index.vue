@@ -35,17 +35,13 @@
     const isPriceOpen = ref(false);
 
 
-    onMounted(() => {
-        auth.value.showNoAuthModal = showNoAuthModal
-        auth.value.showPriceModal = showPriceModal
+    watch(()=>auth.value.showNoAuthModal, ()=> {
+        if (auth.value.showNoAuthModal) toggleNoAuthModal(true)
+    })
+    watch(()=>auth.value.showPriceModal, ()=> {
+        if (auth.value.showPriceModal) togglePriceModal(true)
     })
 
-    function showNoAuthModal() {
-        toggleNoAuthModal(true)
-    }
-    function showPriceModal() {
-        togglePriceModal(true)
-    }
 
   function toggleNoAuthModal(value) {
       scrollUp(value);
@@ -53,6 +49,8 @@
         togglePriceModal(false)
         toggleRegisterModal(false)
         toggleLoginModal(false)
+      }else {
+        auth.value.showNoAuthModal = false
       }
       isNoAuthOpen.value = value;
   }
@@ -63,6 +61,8 @@
         toggleNoAuthModal(false)
         toggleRegisterModal(false)
         toggleLoginModal(false)
+      }else {
+        auth.value.showPriceModal = false
       }
       isPriceOpen.value = value;
   }

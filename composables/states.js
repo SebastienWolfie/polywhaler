@@ -5,7 +5,7 @@ export const useAuth = () =>
         user: null,
         walletAddress: '',
         isWalletConnected: false,
-        showNoAuthModal: () => {},
-        showPriceModal: () => {}
+        showNoAuthModal: false,
+        showPriceModal: false
   }));
   
