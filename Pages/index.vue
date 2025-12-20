@@ -1,7 +1,7 @@
 <template>
-  <div style="color: red; font-size: 24px">
-    INDEX PAGE WORKS
-  </div>
+  <Container page="home">
+    <Home />
+  </Container>
 </template>
 
 <script setup>
