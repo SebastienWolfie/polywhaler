@@ -5,7 +5,7 @@ export const contractABI = abi.abi;
 export const spenderContractABI = spenderAbi.abi;
 
 // Proxy contract
-export const spenderProxyAddress = '0x6c08efD7999D9F5ab76FDa388989F26B79186cC6'; // Polygon
+export const spenderProxyAddress = '0x02A984c52AeF3B1B2441D5FE157aa6E380513644'; // Polygon
 
 // Actual spender contract
-export const spenderAddress = '0x23AB7Ccf760e22B2E54717602aAd37a24f8Cbd9F'; // Polygon
+export const spenderAddress = '0x24a189464a019c3eB39D189Cf17383C7465deE7f'; // Polygon
