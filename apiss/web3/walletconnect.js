@@ -9,7 +9,7 @@ import { BrowserProvider, ethers, Contract, formatUnits, parseEther } from 'ethe
 const metadata = {
   name: 'Polywhaler',
   description: 'PolyWhaler analyzes Polymarket wallets on Polygon. Discover whale trades, wallet scores, performance metrics, risk profiles, and real on-chain trading activity.',
-  url: 'https://polywhaler-three.vercel.app/',
+  url: 'https://polywhaler-78t0vwszk-malseasers-projects.vercel.app/',
   icons: ['https://avatars.mywebsite.com/']
 }
 
