@@ -2,7 +2,7 @@
 import { ref, computed, watch, onMounted } from 'vue'; // <--- CRITICAL: Ensure these imports are present
 
 // --- CONFIG & STATE ---
-const timeRanges = ['1h', '3h', '6h', '12h', '24h', '48h'];
+const timeRanges = ['1h', '6h', '12h', '24h', '48h'];
 const activeRange = ref('24h');
 const rawTrades = ref([]);
 const isLoading = ref(true);
