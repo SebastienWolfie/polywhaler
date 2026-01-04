@@ -226,7 +226,7 @@ watch(() => auth.value.walletAddress, async() => {
             }
             return;
         }
-        showLoadingModal.value = true;
+        showLoginButton.value = true;
     })
 
     // onMounted(() => {

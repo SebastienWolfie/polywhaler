@@ -31,8 +31,33 @@
         <div class="w-10 h-10 border-4 border-white/20 border-t-indigo-500 rounded-full animate-spin"></div>
         <p class="text-gray-400 text-sm">Loading whale activity…</p>
       </div>
+
+      <div v-if="!isVerified" class="bg-gray-900 mb-10 border border-blue-900/50 p-6 rounded-xl text-center">
+        <h3 class="text-xl font-bold text-white">🔒 Premium Data Locked</h3>
+
+
+        <div v-if="auth.user">
+          <p class="text-gray-400 mb-4">Please verify your email address to view whale trade history.</p>
+
+          <button @click="() => sendVerificationClicked()"
+            class="w-fit bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl mt-1 transition-colors text-sm">
+            Send verification mail
+          </button>
+        </div>
+
+        <div v-else>
+          <p class="text-gray-400 mb-4">Please sign in to view premium content</p>
+
+          <button @click="() => auth.showNoAuthModal = true"
+            class="w-fit bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3 px-12 rounded-xl mt-1 transition-colors text-sm">
+            Login
+          </button>
+        </div>
+        
+       </div>
+
       <!-- Stats cards -->
-      <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div v-if="!loading && isVerified" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div class="card-bg rounded-xl p-5 flex items-center justify-between">
           <div>
             <div class="text-gray-500 text-xs font-medium mb-1">Total Volume</div>
@@ -67,7 +92,7 @@
       </div>
 
       <!-- Sentiment panel -->
-      <div v-if="!loading" class="card-bg rounded-xl p-6 mb-6">
+      <div v-if="!loading && isVerified" class="card-bg rounded-xl p-6 mb-6">
         <div class="flex justify-between items-start mb-4">
           <div>
             <h2 class="text-white font-bold text-base mb-1">Market Sentiment</h2>
@@ -132,7 +157,7 @@
       </div>
 
       <!-- Buy / Sell breakdown -->
-      <div v-if="!loading" class="card-bg rounded-xl p-6 mb-6">
+      <div v-if="!loading && isVerified" class="card-bg rounded-xl p-6 mb-6">
         <p class="text-gray-400 text-xs mb-4">Whales are defined as trades >= $10,000.</p>
 
         <div class="flex justify-between text-xs font-bold mb-2">
@@ -158,7 +183,7 @@
       </div>
 
       <!-- Advanced Impact (simple counts) -->
-      <div v-if="!loading" class="card-bg rounded-xl p-6 mb-8">
+      <div v-if="!loading && isVerified" class="card-bg rounded-xl p-6 mb-8">
         <h3 class="font-bold text-white mb-4 text-sm">Advanced Impact Analysis</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-black border border-white/10 rounded-lg p-4">
@@ -255,6 +280,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 
+const auth = useAuth()
 const TRADES_PER_PAGE_DEFAULT = 20;
 const WHALE_THRESHOLD_USD = 10000; // >= $10k
 
@@ -534,5 +560,18 @@ function factorSign(val) {
   return '';
 }
 
+
+
+const sendVerificationClicked = async () => {
+  const { sendConfirmAccountEmail } = useEmaiApi();
+  const result = await sendConfirmAccountEmail(auth.value.user.id, auth.value.user.email, auth.value.user.username, auth.value.walletAddress)
+  console.log(result)
+  auth.value.showEmailConfirmationSent = true
+}
+
+
+const isVerified = computed(() => {
+    return auth.value.user && auth.value.user.emailVerified; 
+});
 
 </script>

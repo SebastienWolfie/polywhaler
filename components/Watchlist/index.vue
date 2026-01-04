@@ -93,6 +93,20 @@ const isFollowed = computed(() => {
     return watchlist.value.some(item => item.address === address)
   }
 })
+
+
+const sendVerificationClicked = async () => {
+  const { sendConfirmAccountEmail } = useEmaiApi();
+  const result = await sendConfirmAccountEmail(auth.value.user.id, auth.value.user.email, auth.value.user.username, auth.value.walletAddress)
+  console.log(result)
+  auth.value.showEmailConfirmationSent = true
+}
+
+
+const isVerified = computed(() => {
+    return auth.value.user && auth.value.user.emailVerified; 
+});
+
 </script>
 
 
@@ -109,7 +123,7 @@ const isFollowed = computed(() => {
 
     <div class="max-w-4xl mx-auto px-4 pt-10">
 
-      <div
+      <!-- <div
         class="card-bg rounded-lg p-5 mb-8 bg-indigo-900/20 border-indigo-700/50 border flex flex-col items-center text-center">
         <div class="flex items-center gap-3 mb-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none"
@@ -129,7 +143,7 @@ const isFollowed = computed(() => {
           </svg>
           Sign in to Enable Sync
         </button>
-      </div>
+      </div> -->
 
       <h2 class="text-white font-bold text-lg mb-4 flex justify-between items-center">
         Suggested Whales to Follow
@@ -137,7 +151,19 @@ const isFollowed = computed(() => {
           activity</span>
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
+      
+      <div v-if="!isVerified" class="bg-gray-900 mb-10 border border-blue-900/50 p-6 rounded-xl text-center">
+        <h3 class="text-xl font-bold text-white">🔒 Premium Data Locked</h3>
+        <p class="text-gray-400 mb-4">Please verify your email address to view whale trade history.</p>
+
+        <button @click="() => sendVerificationClicked()"
+          class="w-fit bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl mt-1 transition-colors text-sm">
+          Send verification mail
+        </button>
+       </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" v-else>
         <div v-for="whale in filteredWhales" :key="whale.address"
           class="card-bg rounded-lg p-4 border border-white/10 hover:border-purple-600 transition-all">
           <div class="flex items-center gap-3 mb-4">

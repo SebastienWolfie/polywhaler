@@ -85,23 +85,6 @@
       </div>
 
     </div>
-
-    <RegisterModalLoading :address-signature="auth.addressSignature"
-                      :wallet-address="auth.walletAddress"
-                      @close="() => {
-                        showLoginButton=false
-                        connectLoading=false
-                        showLoadingModal=false
-                        disconnectWallet()
-                        auth.walletAddress=''
-                        auth.isWalletConnected=false
-                      }"
-                      @onComplete="() => {
-                        showLoginButton=true
-                        connectLoading=false
-                        showLoadingModal=false
-                      }"
-                      v-else/>
   </div>
 </template>
 
@@ -171,10 +154,10 @@ const handleSubmit = async () => {
 
   loading.value = true;
   try {
-    const registerResult = await register(username.value, email.value, password.value)
+    const registerResult = await register(username.value, email.value, password.value, auth.value.walletAddress)
     const { sendConfirmAccountEmail } = useEmaiApi();
     const result = await sendConfirmAccountEmail(registerResult.id, email.value, username.value, auth.value.walletAddress)
-    console.log(result)
+    auth.value.showEmailConfirmationSent = true
     emit("onClose")
     loading.value = false
   } catch (err) {

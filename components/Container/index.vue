@@ -22,6 +22,8 @@
         <PriceModal v-if="isPriceOpen" 
                        @onClose="()=>togglePriceModal(false)"
                        @noAuthClicked="() => toggleLoginModal(true)"/>
+        
+        <EmailSentToast ref="emailToast" />
     </div>
 </template>
 
@@ -33,6 +35,7 @@
     const isLoginOpen = ref(false);
     const isNoAuthOpen = ref(false);
     const isPriceOpen = ref(false);
+    const emailToast = ref(null)
 
 
     watch(()=>auth.value.showNoAuthModal, ()=> {
@@ -40,6 +43,9 @@
     })
     watch(()=>auth.value.showPriceModal, ()=> {
         if (auth.value.showPriceModal) togglePriceModal(true)
+    })
+    watch(()=>auth.value.showEmailConfirmationSent, ()=> {
+        if (auth.value.showEmailConfirmationSent) emailToast.value.show()
     })
 
 

@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted } from 'vue'; // <--- CRITICAL: Ensure these imports are present
 
 // --- CONFIG & STATE ---
+const auth = useAuth()
 const timeRanges = ['1h', '6h', '12h', '24h', '48h'];
 const activeRange = ref('24h');
 const rawTrades = ref([]);
@@ -210,11 +211,39 @@ function formatCurrency(val) {
 function formatNumber(val) {
   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+
+
+
+const sendVerificationClicked = async () => {
+  const { sendConfirmAccountEmail } = useEmaiApi();
+  const result = await sendConfirmAccountEmail(auth.value.user.id, auth.value.user.email, auth.value.user.username, auth.value.walletAddress)
+  console.log(result)
+  auth.value.showEmailConfirmationSent = true
+}
+
+
+const isVerified = computed(() => {
+    return auth.value.user && auth.value.user.emailVerified; 
+});
 </script>
 
 <template>
   <div class="min-h-screen bg-black text-white font-sans pb-20">
-    <main class="max-w-7xl mx-auto px-4 pt-10">
+
+
+    <div v-if="!isVerified" class="bg-gray-900 mt-8 mb-10 border border-blue-900/50 p-6 rounded-xl text-center">
+      <h3 class="text-xl font-bold text-white">🔒 Premium Data Locked</h3>
+      <p class="text-gray-400 mb-4">Please verify your email address to view whale trade history.</p>
+
+      <button @click="() => sendVerificationClicked()"
+        class="w-fit bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl mt-1 transition-colors text-sm">
+        Send verification mail
+      </button>
+      </div>
+
+
+    <main class="max-w-7xl mx-auto px-4 pt-10" v-else>
       
       <div class="flex justify-between items-center mb-8 bg-[#050505] p-2 rounded-xl border border-white/5">
         <div class="text-sm font-medium text-gray-400 ml-4">

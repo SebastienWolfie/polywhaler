@@ -11,17 +11,28 @@
         <div class="space-y-4">
           <div>
             <label class="text-sm text-white/50">User ID</label>
-            <p class="text-sm font-medium mt-1 break-all">{{ user.id }}</p>
+            <p class="text-sm font-medium mt-1 break-all">{{ user?.id }}</p>
           </div>
 
           <div>
             <label class="text-sm text-white/50">Username</label>
-            <p class="text-sm font-medium mt-1">{{ user.username }}</p>
+            <p class="text-sm font-medium mt-1">{{ user?.username }}</p>
           </div>
 
           <div>
             <label class="text-sm text-white/50">Email</label>
-            <p class="text-sm font-medium mt-1">{{ user.email }}</p>
+            <p class="text-sm font-medium mt-1">{{ user?.email }}</p>
+          </div>
+
+
+          <div>
+            <p class="text-sm font-[18px]">{{ (user && user.emailVerified) ? 'Email verified' : 'Email not verified' }}</p>
+            
+            <button @click="() => sendVerificationClicked()"
+              v-if="!(user && user.emailVerified)"
+              class="w-fit bg-[#639bfb] hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl mt-1 transition-colors text-sm">
+              Send verification mail
+            </button>
           </div>
 
           <div>
@@ -32,14 +43,14 @@
 
           <div>
             <label class="text-sm text-white/50">Wallet Address</label>
-            <p class="text-sm font-medium mt-1">{{ useAuth().value.walletAddress }}</p>
+            <p class="text-sm font-medium mt-1">{{ useAuth().value?.walletAddress }}</p>
           </div>
 
 
           <div>
             <label class="text-sm text-white/50">Account Created</label>
             <p class="text-sm font-medium mt-1">
-              {{ formatDate(user.dateCreated) }}
+              {{ formatDate(user?.dateCreated) }}
             </p>
           </div>
         </div>
@@ -71,9 +82,19 @@
 <script setup>
 import logout from '~/apiss/logout'
 
-const user = ref(useAuth().value.user)
+const auth = useAuth()
+const user = ref()
+
+onMounted(() => {
+  if (auth.value.user) user.value = auth.value.user
+})
+
+watch(()=>auth.value.user, ()=> {
+  if (auth.value.user) user.value = auth.value.user
+})
 
 const formatDate = (date) => {
+
   return new window.Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -81,8 +102,10 @@ const formatDate = (date) => {
   })
 }
 
-const changePassword = () => {
-  console.log("Open Change Password Modal")
+const sendVerificationClicked = async () => {
+  const { sendConfirmAccountEmail } = useEmaiApi();
+  const result = await sendConfirmAccountEmail(user.value.id, user.value.email, user.value.username, auth.value.walletAddress)
+  auth.value.showEmailConfirmationSent = true
 }
 
 const logoutClicked = async () => {

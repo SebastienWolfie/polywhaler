@@ -25,21 +25,20 @@ export default defineEventHandler(async (event) => {
     const baseUrl = 'https://polyaccountverify.web.app'; 
     const verificationLink = `${baseUrl}/verify/${token}`;
 
-    return { token: token, link: verificationLink }
     // 3. Configure Transporter
     let transporter = nodemailer.createTransport({
-        host: "smtp.titan.email",
+        host: "mail.privateemail.com",
         port: 465,
         secure: true,
         auth: {
-            user: 'no-reply@xn--hteronline-9db.com', // Replace with your actual email
-            pass: 'Huteronline123?' // Replace with env variable in prod
+            user: 'info@polywhaler.net', // Replace with your actual email
+            pass: '$Wolfie@420' // Replace with env variable in prod
         }
     });
 
     // 4. Send Email
     const mail_configs = {
-        from: '"Polywhaler Security" <no-reply@xn--hteronline-9db.com>',
+        from: '"Polywhaler Security" <info@polywhaler.net>',
         to: email, 
         subject: 'Verify your Polywhaler Account',
         html: `
