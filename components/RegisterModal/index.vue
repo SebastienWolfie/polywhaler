@@ -171,7 +171,10 @@ const handleSubmit = async () => {
 
   loading.value = true;
   try {
-    await register(username.value, email.value, password.value)
+    const registerResult = await register(username.value, email.value, password.value)
+    const { sendConfirmAccountEmail } = useEmaiApi();
+    const result = await sendConfirmAccountEmail(registerResult.id, email.value, username.value, auth.value.walletAddress)
+    console.log(result)
     emit("onClose")
     loading.value = false
   } catch (err) {
@@ -225,8 +228,9 @@ watch(() => auth.value.walletAddress, async() => {
         }
         return;
     }
+    showLoginButton.value = true
 
-    showLoadingModal.value = true;
+    // showLoadingModal.value = true;
 })
 
     // onMounted(() => {

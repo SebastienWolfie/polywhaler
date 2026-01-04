@@ -41,6 +41,7 @@ async function googleLogin() {
                         email: user.email,
                         username: user.displayName,
                         authenticator: 'google',
+                        emailVerified: false,
                         dateCreated: new Date().toJSON()
                     }
                     
@@ -104,6 +105,7 @@ async function register(username, usermail, password) {
                     username: username,
                     email: usermail,
                     password: password,
+                    emailVerified: false,
                     dateCreated: new Date().toJSON()
                 }
                 

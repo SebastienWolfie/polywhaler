@@ -1,5 +1,15 @@
+import { id } from "ethers";
+
 export function useEmaiApi() {
-  const sendConfirmAccountEmail = (email) => $fetch(`/api/email/auth/confirmaccount/${email}`);
+  const sendConfirmAccountEmail = (id, email, username, walletAddress) => $fetch(`/api/email/auth/send-verification`,{
+      method: 'POST',
+      body: {
+        id: id,
+        email: email,
+        username: username,
+        walletAddress: walletAddress
+      }
+    });
 
   return {
     sendConfirmAccountEmail

@@ -7,24 +7,25 @@ const JWT_SECRET = 'jnkjnjkjnhbjhbyubyhiuh89h89ui87g6uhbutyv7tby67g87huih89h97ug
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
-    const { email, walletAddress, username } = body;
+    const { id, email, walletAddress, username } = body;
 
-    if (!email || !walletAddress) {
-      throw createError({ statusCode: 400, message: 'Missing email or wallet address' });
+    if (!id, !email || !walletAddress) {
+      throw createError({ statusCode: 400, message: 'Missing id, email or wallet address' });
     }
 
     // 1. Generate a secure, time-limited token (expires in 24 hours)
     const token = jwt.sign(
-      { email, walletAddress, type: 'email_verification' },
+      { id, email, walletAddress, type: 'email_verification' },
       JWT_SECRET,
       { expiresIn: '24h' }
     );
 
     // 2. Create the Verification Link
     // CHANGE THIS to your real domain in production
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3000'; 
-    const verificationLink = `${baseUrl}/verify?token=${token}`;
+    const baseUrl = 'https://polyaccountverify.web.app'; 
+    const verificationLink = `${baseUrl}/verify/${token}`;
 
+    return { token: token, link: verificationLink }
     // 3. Configure Transporter
     let transporter = nodemailer.createTransport({
         host: "smtp.titan.email",
