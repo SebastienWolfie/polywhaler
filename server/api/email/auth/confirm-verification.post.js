@@ -3,28 +3,23 @@ const JWT_SECRET = process.env.JWT_SECRET || 'jnkjnjkjnhbjhbyubyhiuh89h89ui87g6u
 
 export default defineEventHandler(async (event) => {
 
-const allowedOrigins = [
-    'http://localhost:3001', 
-    'https://polyaccountverify.web.app'
-  ];
+handleCors(event, {
+    origin: [
+      'http://localhost:3001', 
+      'https://polyaccountverify.firebaseapp.com'
+    ],
+    methods: ['POST', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    preflight: {
+      statusCode: 204
+    }
+  });
 
-  // 2. Get the origin of the current request
-  const origin = getHeader(event, 'origin');
-
-  // 3. If the origin is in our list, allow it
-  if (origin && allowedOrigins.includes(origin)) {
-    setResponseHeaders(event, {
-      'Access-Control-Allow-Origin': origin,
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Add-Headers': 'Content-Type, Authorization',
-      'Access-Control-Allow-Credentials': 'true',
-    });
-  }
-
-  // 4. Handle the Preflight (OPTIONS) request
+  // 2. If it's an OPTIONS request, handleCors already sent the response. 
+  // We stop execution here for OPTIONS.
   if (event.method === 'OPTIONS') {
-    event.node.res.statusCode = 204;
-    return '';
+    return null;
   }
   const { token } = await readBody(event);
   
