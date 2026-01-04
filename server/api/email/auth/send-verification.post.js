@@ -43,30 +43,96 @@ export default defineEventHandler(async (event) => {
         subject: 'Verify your Polywhaler Account',
         html: `
         <!DOCTYPE html>
-        <html>
-        <head>
-          <style>
-            body { font-family: 'Arial', sans-serif; background-color: #000; color: #fff; }
-            .container { max-width: 600px; margin: 0 auto; padding: 40px; border: 1px solid #333; border-radius: 12px; }
-            .btn { background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin-top: 20px;}
-            .footer { margin-top: 30px; font-size: 12px; color: #666; }
-          </style>
-        </head>
-        <body>
-            <div class="container">
-               <h2>Welcome to Polywhaler, ${username}!</h2>
-               <p>To access whale tracking features, please confirm that <strong>${walletAddress}</strong> is your wallet address.</p>
-               
-               <a href="${verificationLink}" class="btn">Verify My Account</a>
-               
-               <p style="margin-top:20px; color: #888;">Link expires in 24 hours.</p>
-               
-               <div class="footer">
-                 If you did not create this account, please ignore this email.
-               </div>
-            </div>
-        </body>
-        </html>`
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Verify Your Wallet — Polywhaler</title>
+</head>
+
+<body style="margin:0;padding:0;background:#000;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#e5e7eb;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+        <table width="100%" style="max-width:640px;background:#05070c;border-radius:20px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 0 60px rgba(99,102,241,0.25);overflow:hidden;">
+
+          <!-- Header -->
+          <tr>
+            <td style="padding:28px 32px;background:linear-gradient(135deg,#6366f1,#a855f7);">
+              <div style="font-size:26px;font-weight:900;letter-spacing:0.4px;color:white;">
+                Polywhaler
+              </div>
+              <div style="font-size:13px;color:#e0e7ff;margin-top:4px;">
+                Polymarket Whale Intelligence
+              </div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:36px 32px;">
+              <h2 style="margin:0 0 12px;font-size:22px;color:white;">
+                Welcome, ${username} 👋
+              </h2>
+
+              <p style="margin:0 0 16px;color:#9ca3af;font-size:14px;line-height:1.6;">
+                You’re about to unlock real-time whale tracking, $10k+ trade alerts, and AI-powered market sentiment analysis.
+              </p>
+
+              <!-- Wallet Card -->
+              <div style="background:#000;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;margin:18px 0;">
+                <div style="font-size:11px;color:#6b7280;margin-bottom:6px;">
+                  Wallet Address
+                </div>
+                <div style="font-size:13px;font-weight:700;color:#818cf8;word-break:break-all;">
+                  ${walletAddress}
+                </div>
+              </div>
+
+              <p style="color:#9ca3af;font-size:13px;">
+                Click below to confirm your wallet and activate:
+              </p>
+
+              <ul style="padding-left:18px;color:#9ca3af;font-size:13px;line-height:1.6;">
+                <li>Live whale monitoring</li>
+                <li>Private trader scoring</li>
+                <li>Insider activity detection</li>
+              </ul>
+
+              <!-- CTA -->
+              <div style="text-align:center;margin:32px 0 22px;">
+                <a href="${verificationLink}"
+                   style="display:inline-block;padding:15px 40px;border-radius:14px;background:linear-gradient(90deg,#6366f1,#a855f7);color:white;font-weight:800;text-decoration:none;font-size:14px;box-shadow:0 0 25px rgba(168,85,247,0.6);">
+                  Verify Wallet →
+                </a>
+              </div>
+
+              <div style="font-size:12px;color:#6b7280;text-align:center;">
+                Link expires in <strong>24 hours</strong>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:24px 32px;border-top:1px solid rgba(255,255,255,0.06);background:#020308;">
+              <div style="font-size:11px;color:#6b7280;line-height:1.6;">
+                If you did not create a Polywhaler account, ignore this email.  
+                We never request private keys or transaction approvals.
+              </div>
+
+              <div style="margin-top:12px;font-size:10px;color:#374151;">
+                © 2025 Polywhaler · Advanced Polymarket Intelligence
+              </div>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
     };
 
     await transporter.sendMail(mail_configs);
