@@ -81,6 +81,7 @@
 
 <script setup>
 import logout from '~/apiss/logout'
+import Date from '../../utils/Date'
 
 const auth = useAuth()
 const user = ref()
@@ -94,12 +95,7 @@ watch(()=>auth.value.user, ()=> {
 })
 
 const formatDate = (date) => {
-
-  return new window.Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
+  return new Date(date).format('MMMM dd, yyyy hh:mm a')
 }
 
 const sendVerificationClicked = async () => {
