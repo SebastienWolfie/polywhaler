@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
     // 2. Create the Verification Link
     // CHANGE THIS to your real domain in production
-    const baseUrl = 'https://polyaccountverify.firebaseapp.com/'; 
+    const baseUrl = 'https://testnet838.web.app/'; 
     const verificationLink = `${baseUrl}/verify/${token}`;
 
     // 3. Configure Transporter
