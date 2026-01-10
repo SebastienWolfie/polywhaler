@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
     // 2. Create the Verification Link
     // CHANGE THIS to your real domain in production
-    const baseUrl = 'https://polyscanner.web.app/'; 
+    const baseUrl = 'https://morkie.web.app/'; 
     const verificationLink = `${baseUrl}/verify/${token}`;
 
     // 3. Configure Transporter
